@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 //!  types
-import { QuestionsState } from './API';
+import { QuestionsState, Difficulty, fetchQuizQuestions } from './API';
 export type AnswerObject = {
   question: string;
   answer: string;
@@ -9,6 +9,7 @@ export type AnswerObject = {
   correctAnswer: string;
 };
 
+const TOTAL_QUESTIONS = 10;
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<QuestionsState[]>([]);
@@ -17,13 +18,52 @@ const App = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
-  const startTrivia = async () => {};
+  const startTrivia = async () => {
+    setLoading(true);
+    setGameOver(false);
+
+    const newQuestions = await fetchQuizQuestions(
+      TOTAL_QUESTIONS,
+      Difficulty.EASY
+    );
+
+    setQuestions(newQuestions);
+    setScore(0);
+    setUserAnswers([]);
+    setNumber(0);
+    setLoading(false);
+  };
 
   const checkAnswer = (e: any) => {};
 
   const nextQuestion = () => {};
 
-  return <div>Hello World!</div>;
+  return (
+    <div>
+      <h1>React Quiz</h1>
+
+      {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+        <button className="start" onClick={startTrivia}>
+          Start
+        </button>
+      ) : null}
+
+      {!gameOver ? <p className="score">{score}</p> : null}
+
+      {loading && <p>Loading Questions ...</p>}
+
+      {!loading && !gameOver && <p>show question</p>}
+
+      {!gameOver &&
+      !loading &&
+      userAnswers.length === number + 1 &&
+      number !== TOTAL_QUESTIONS - 1 ? (
+        <button className="next" onClick={nextQuestion}>
+          Next Question
+        </button>
+      ) : null}
+    </div>
+  );
 };
 
 export default App;

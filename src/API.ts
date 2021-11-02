@@ -1,3 +1,5 @@
+import { shuffleArray } from './utils';
+
 export type Question = {
   category: string;
   correct_answer: string;
@@ -6,7 +8,6 @@ export type Question = {
   question: string;
   type: string;
 };
-
 export enum Difficulty {
   EASY = 'easy',
   MEDIUM = 'medium',
