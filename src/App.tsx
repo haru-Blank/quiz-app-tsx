@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 
+// ! components
+import QuestionCard from './Components/QuestionCard';
+
 //!  types
 import { QuestionsState, Difficulty, fetchQuizQuestions } from './API';
+
 export type AnswerObject = {
   question: string;
   answer: string;
@@ -52,7 +56,16 @@ const App = () => {
 
       {loading && <p>Loading Questions ...</p>}
 
-      {!loading && !gameOver && <p>show question</p>}
+      {!loading && !gameOver && (
+        <QuestionCard
+          questionNr={number + 1}
+          totalQuestions={TOTAL_QUESTIONS}
+          question={questions[number].question}
+          answers={questions[number].answers}
+          userAnswer={userAnswers ? userAnswers[number] : undefined}
+          callback={checkAnswer}
+        />
+      )}
 
       {!gameOver &&
       !loading &&
