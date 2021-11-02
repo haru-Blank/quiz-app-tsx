@@ -61,10 +61,21 @@ const App = () => {
       };
 
       setUserAnswers((prev) => [...prev, answerObject]);
+
+      console.log(userAnswers);
     }
   };
 
-  const nextQuestion = () => {};
+  const nextQuestion = () => {
+    // Move on to the next question if not the last question
+    const nextQ = number + 1;
+
+    if (nextQ === TOTAL_QUESTIONS) {
+      setGameOver(true);
+    } else {
+      setNumber(nextQ);
+    }
+  };
 
   return (
     <>
@@ -72,13 +83,17 @@ const App = () => {
 
       <Wrapper>
         <h1>React Quiz</h1>
+
         {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
           <button className="start" onClick={startTrivia}>
             Start
           </button>
         ) : null}
+
         {!gameOver ? <p className="score">{score}</p> : null}
+
         {loading && <p>Loading Questions ...</p>}
+
         {!loading && !gameOver && (
           <QuestionCard
             questionNr={number + 1}
@@ -89,6 +104,7 @@ const App = () => {
             callback={checkAnswer}
           />
         )}
+
         {!gameOver &&
         !loading &&
         userAnswers.length === number + 1 &&
