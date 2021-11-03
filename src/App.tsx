@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 // ! components
 import QuestionCard from './Components/QuestionCard';
+import UserAnswer from './Components/UserAnswer';
 
 //!  types
 import { QuestionsState, Difficulty, fetchQuizQuestions } from './API';
@@ -16,7 +17,7 @@ export type AnswerObject = {
   correctAnswer: string;
 };
 
-const TOTAL_QUESTIONS = 10;
+const TOTAL_QUESTIONS = 2;
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<QuestionsState[]>([]);
@@ -24,6 +25,7 @@ const App = () => {
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
+  const [result, setResult] = useState(false);
 
   const startTrivia = async () => {
     setLoading(true);
@@ -38,6 +40,7 @@ const App = () => {
     setScore(0);
     setUserAnswers([]);
     setNumber(0);
+    setResult(false);
     setLoading(false);
   };
 
@@ -61,8 +64,6 @@ const App = () => {
       };
 
       setUserAnswers((prev) => [...prev, answerObject]);
-
-      console.log(userAnswers);
     }
   };
 
@@ -90,11 +91,21 @@ const App = () => {
           </button>
         ) : null}
 
-        {!gameOver ? <p className="score">{score}</p> : null}
+        {userAnswers.length === TOTAL_QUESTIONS ? (
+          <button className="show-result" onClick={() => setResult(true)}>
+            Show result
+          </button>
+        ) : null}
+
+        {!gameOver ? (
+          <p className="score">
+            Score {score} / {questions.length}
+          </p>
+        ) : null}
 
         {loading && <p>Loading Questions ...</p>}
 
-        {!loading && !gameOver && (
+        {!result && !loading && !gameOver && (
           <QuestionCard
             questionNr={number + 1}
             totalQuestions={TOTAL_QUESTIONS}
@@ -105,6 +116,8 @@ const App = () => {
           />
         )}
 
+        {result &&
+          userAnswers.map((userAnswer) => <UserAnswer {...userAnswer} />)}
         {!gameOver &&
         !loading &&
         userAnswers.length === number + 1 &&

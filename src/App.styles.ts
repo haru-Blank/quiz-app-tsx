@@ -47,7 +47,8 @@ export const Wrapper = styled.div`
     margin: 20px;
   }
   .start,
-  .next {
+  .next,
+  .show-result {
     cursor: pointer;
     background: linear-gradient(180deg, #ffffff, #ffcc91);
     border: 2px solid #d38558;
